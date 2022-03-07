@@ -10,10 +10,22 @@ namespace Mera.Quiz.Domain.Models
     {
         public int ID { get; set; }
         public string AnswerText { get; set; }
-        //public AnswerModel(int iD, string answerText)
-        //{
-        //    ID = iD;
-        //    AnswerText = answerText;
-        //}
+
+        public AnswerModel()
+        {
+
+        }
+
+        public AnswerModel(string answerText)
+        {
+            ID = -1;
+            AnswerText = answerText;
+        }
+
+        public AnswerModel(int iD, string answerText)
+        {
+            ID = iD;
+            AnswerText = answerText;
+        }
     }
 }

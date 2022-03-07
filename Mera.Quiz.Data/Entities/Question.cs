@@ -20,12 +20,10 @@ namespace Mera.Quiz.Data.Entities
         [Required]
         public string QuestionText { get; set; }
 
-
         public List<Answer> AnswerList { get; set; }
 
 
-        [Required]
-        [ForeignKey("correctanswer")]
-        public Answer CorrectAnswer { get; set; }
+        
+        
     }
 }

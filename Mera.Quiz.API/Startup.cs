@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc.NewtonsoftJson;
 
 namespace Mera.Quiz.API
 {
@@ -40,14 +41,27 @@ namespace Mera.Quiz.API
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Mera.Quiz.API", Version = "v1" });
             });
+            services.AddMvc().AddNewtonsoftJson();
+
+            //Database context
             services.AddDbContext<AppDbContext>(options =>
             {
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             });
+
+            //Mediator
             services.AddMediatR(typeof(Startup).Assembly);
+
+            //Services
             services.AddScoped<IAnswerService, AnswerService>();
             services.AddScoped<IAnswerRepository, AnswerRepository>();
+            services.AddScoped<IQuestionService, QuestionService> ();
+            services.AddScoped<IQuestionRepository, QuestionRepository>();
+
+
+            //Mapping profiles
             services.AddAutoMapper(typeof(AnswerMappingProfile));
+            services.AddAutoMapper(typeof(QuestionMappingProfile));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

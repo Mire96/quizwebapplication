@@ -1,28 +1,22 @@
-﻿using System;
+﻿using MediatR;
+using Mera.Quiz.Domain.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
-namespace Mera.Quiz.Domain.Models
+namespace Mera.Quiz.API.Adapters.QuestionAdapters.Commands
 {
-    public class QuestionModel
+    public class CreateQuestionCommand : IRequest<QuestionModel>
     {
-        public int ID { get; set; }
         public string QuestionText { get; set; }
         public List<AnswerModel> AnswerList { get; set; }
         public AnswerModel CorrectAnswer { get; set; }
 
-        public QuestionModel()
+        public CreateQuestionCommand(string questionText, IEnumerable<AnswerModel> answerList, AnswerModel correctAnswer)
         {
-
-        }
-
-        public QuestionModel(string questionText, List<AnswerModel> answerList, AnswerModel correctAnswer)
-        {
-            ID = -1;
             QuestionText = questionText;
-            AnswerList = answerList;
+            AnswerList = answerList.ToList();
             CorrectAnswer = correctAnswer;
         }
     }

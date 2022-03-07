@@ -10,11 +10,9 @@ namespace Mera.Quiz.Domain.Interfaces
     public interface IAnswerService
     {
         Task<List<AnswerModel>> GetAllAnswersAsync();
-
-        Task<AnswerModel> CreateAnswerAsync(AnswerModel answer);
-
-        Task<AnswerModel> UpdateAnswerAsync(AnswerModel answer);
-
-        Task<bool> DeleteAnswerAsync(AnswerModel answer);
+        Task<AnswerModel> GetAnswerAsync(int id);
+        Task<AnswerModel> CreateAnswerAsync(string answer);
+        Task<AnswerModel> UpdateAnswerAsync(int id, string answerText);
+        Task<bool> DeleteAnswerAsync(int id);
     }
 }

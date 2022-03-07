@@ -20,6 +20,10 @@ namespace Mera.Quiz.Data.Entities
         [Required]
         public string AnswerText { get; set; }
 
+        [Column("isCorrect", TypeName = "bit")]
+        [Required]
+        public bool isCorrect { get; set; }
+
 
 
     }

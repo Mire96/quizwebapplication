@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Mera.Quiz.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20220306084915_initial")]
+    [Migration("20220307164209_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -37,6 +37,10 @@ namespace Mera.Quiz.Data.Migrations
                     b.Property<int?>("QuestionID")
                         .HasColumnType("int");
 
+                    b.Property<bool>("isCorrect")
+                        .HasColumnType("bit")
+                        .HasColumnName("isCorrect");
+
                     b.HasKey("ID");
 
                     b.HasIndex("QuestionID");
@@ -60,14 +64,9 @@ namespace Mera.Quiz.Data.Migrations
                     b.Property<int?>("TestID")
                         .HasColumnType("int");
 
-                    b.Property<int>("correctanswer")
-                        .HasColumnType("int");
-
                     b.HasKey("ID");
 
                     b.HasIndex("TestID");
-
-                    b.HasIndex("correctanswer");
 
                     b.ToTable("Question");
                 });
@@ -102,14 +101,6 @@ namespace Mera.Quiz.Data.Migrations
                     b.HasOne("Mera.Quiz.Data.Entities.Test", null)
                         .WithMany("QuestionList")
                         .HasForeignKey("TestID");
-
-                    b.HasOne("Mera.Quiz.Data.Entities.Answer", "CorrectAnswer")
-                        .WithMany()
-                        .HasForeignKey("correctanswer")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("CorrectAnswer");
                 });
 
             modelBuilder.Entity("Mera.Quiz.Data.Entities.Question", b =>

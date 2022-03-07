@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Mera.Quiz.API.Adapters.Commands;
 using Mera.Quiz.API.Adapters.Queries;
 using Mera.Quiz.Domain.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -19,39 +20,52 @@ namespace Mera.Quiz.API.Controllers
 
         public AnswerController(IMediator mediator)
         {
-            this._mediator = mediator;
+            _mediator = mediator;
         }
 
         // GET: api/<AnswerController>
         [HttpGet]
-        public async Task<List<AnswerModel>> Get()
+        public async Task<IActionResult> Get()
         {
-            return await _mediator.Send(new GetAllAnswersQuery());
+            var query = new GetAllAnswersQuery();
+            var answers = await _mediator.Send(query);
+            return answers != null ? (IActionResult)Ok(answers) : NotFound();
         }
 
         // GET api/<AnswerController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public async Task<IActionResult> Get(int id)
         {
-            return "value";
+            var query = new GetAnswerQuery(id);
+            var answer = await _mediator.Send(query);
+            return answer != null ? (IActionResult) Ok(answer) : NotFound();
         }
 
         // POST api/<AnswerController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<IActionResult> Post([FromBody] string value)
         {
+            var command = new CreateAnswerCommand(value);
+            var answer = await _mediator.Send(command);
+            return answer.ID != -1 ? (IActionResult)Ok(answer) : NotFound();
         }
 
         // PUT api/<AnswerController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public async Task<IActionResult> Put(int id, [FromBody] string value)
         {
+            var command = new UpdateAnswerCommand(id, value);
+            var answer = await _mediator.Send(command);
+            return answer.AnswerText == value ? (IActionResult)Ok(answer) : NotFound();
         }
 
         // DELETE api/<AnswerController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
+            var command = new DeleteAnswerCommand(id);
+            bool deleteAnswerSuccesful = await _mediator.Send(command);
+            return deleteAnswerSuccesful ? (IActionResult)Ok() : NotFound();
         }
     }
 }

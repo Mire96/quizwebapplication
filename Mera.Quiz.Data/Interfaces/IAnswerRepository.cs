@@ -10,11 +10,10 @@ namespace Mera.Quiz.Data.Interfaces
     public interface IAnswerRepository
     {
         Task<List<Answer>> GetAllAnswersAsync();
-
         Task<Answer> CreateAnswerAsync(Answer answer);
-
         Task<Answer> UpdateAnswerAsync(Answer answer);
-
-        Task<bool> DeleteAnswerAsync(Answer answer);
+        Task<Answer> GetAnswerAsync(int id);
+        Task<bool> DeleteAnswerAsync(int id);
+        Task<List<Answer>>GroupCreateAnswerAsync(List<Answer> answerList);
     }
 }

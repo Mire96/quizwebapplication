@@ -23,15 +23,8 @@ namespace Mera.Quiz.Domain.Services
             _mapper = mapper;
         }
 
-        public Task<AnswerModel> CreateAnswerAsync(AnswerModel answer)
-        {
-            throw new NotImplementedException();
-        }
+        
 
-        public Task<bool> DeleteAnswerAsync(AnswerModel answer)
-        {
-            throw new NotImplementedException();
-        }
 
         public async Task<List<AnswerModel>> GetAllAnswersAsync()
         {
@@ -41,9 +34,39 @@ namespace Mera.Quiz.Domain.Services
             return answerModels;
         }
 
-        public Task<AnswerModel> UpdateAnswerAsync(AnswerModel answer)
+        public async Task<AnswerModel> GetAnswerAsync(int id)
         {
-            throw new NotImplementedException();
+            var answerEntity = await _answerRepository.GetAnswerAsync(id);
+            var answerModel = _mapper.Map<Answer,AnswerModel> (answerEntity);
+            return answerModel;
+        }
+
+        public async Task<AnswerModel> CreateAnswerAsync(string answer)
+        {
+            AnswerModel newAnswerModel = new AnswerModel(answer);
+            Answer newAnswerEntity = _mapper.Map<AnswerModel, Answer>(newAnswerModel);
+
+            var createdAnswerEntity = await _answerRepository.CreateAnswerAsync(newAnswerEntity);
+            var createdAnswerModel = _mapper.Map<Answer, AnswerModel>(createdAnswerEntity);
+
+            return createdAnswerModel;
+        }
+
+        public async Task<AnswerModel> UpdateAnswerAsync(int id, string answerText)
+        {
+            AnswerModel newAnswerModel = new AnswerModel(id, answerText);
+            Answer newAnswerEntity = _mapper.Map<AnswerModel, Answer>(newAnswerModel);
+
+            var updatedAnswerEntity = await _answerRepository.UpdateAnswerAsync(newAnswerEntity);
+            var updatedAnswerModel = _mapper.Map<Answer, AnswerModel>(updatedAnswerEntity);
+
+            return updatedAnswerModel;
+        }
+
+        public async Task<bool> DeleteAnswerAsync(int id)
+        {
+            bool deleteAnswerSuccessful = await _answerRepository.DeleteAnswerAsync(id);
+            return deleteAnswerSuccessful;
         }
     }
 }

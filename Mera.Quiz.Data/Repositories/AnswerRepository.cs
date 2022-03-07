@@ -1,6 +1,7 @@
 ﻿using Mera.Quiz.Data.Database;
 using Mera.Quiz.Data.Entities;
 using Mera.Quiz.Data.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,27 +19,52 @@ namespace Mera.Quiz.Data.Repositories
             _context = context;
         }
 
-
-
-        public Task<Answer> CreateAnswerAsync(Answer answer)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<bool> DeleteAnswerAsync(Answer answer)
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task<List<Answer>> GetAllAnswersAsync()
         {
+            var testanswers = await _context.Answers.ToListAsync();
             var entityAnswers = _context.Answers.ToList();
             return entityAnswers;
         }
 
-        public Task<Answer> UpdateAnswerAsync(Answer answer)
+        public async Task<Answer> GetAnswerAsync(int id)
         {
-            throw new NotImplementedException();
+            var entityAnswer = await _context.Answers.FindAsync(id);
+            return entityAnswer;
+        }
+
+        public async Task<Answer> CreateAnswerAsync(Answer answer)
+        {
+            _context.Add(answer);
+            await _context.SaveChangesAsync();
+            return answer;
+
+        }
+
+        public async Task<Answer> UpdateAnswerAsync(Answer answer)
+        {
+            var entityAnswer = _context.Answers.Find(answer.ID);
+            entityAnswer.AnswerText = answer.AnswerText;
+            await _context.SaveChangesAsync();
+            return entityAnswer;
+        }
+
+        public async Task<bool> DeleteAnswerAsync(int id)
+        {
+            //var entityAnswer = _context.Answers.Find(id);
+            //_context.Answers.Remove(entityAnswer);
+            var entityAnswer = new Answer() { ID = id };
+            _context.Entry(entityAnswer).State = Microsoft.EntityFrameworkCore.EntityState.Deleted;
+
+            int isDeleted = await _context.SaveChangesAsync();
+            return isDeleted != 0 ? true : false;
+        }
+
+
+        public async Task<List<Answer>> GroupCreateAnswerAsync(List<Answer> answerList)
+        {
+            await _context.AddRangeAsync(answerList);
+            //_context.SaveChanges();
+            return answerList;
         }
     }
 }
