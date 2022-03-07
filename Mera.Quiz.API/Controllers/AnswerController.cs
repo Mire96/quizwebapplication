@@ -56,7 +56,7 @@ namespace Mera.Quiz.API.Controllers
         {
             var command = new UpdateAnswerCommand(answerModel);
             var answer = await _mediator.Send(command);
-            return answer.Equals(answerModel) ? (IActionResult)Ok(answer) : NotFound();
+            return answerModel.Equals(answer) ? (IActionResult)Ok(answer) : NotFound();
         }
 
         // DELETE api/<AnswerController>/5

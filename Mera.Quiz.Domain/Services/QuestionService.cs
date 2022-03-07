@@ -24,17 +24,7 @@ namespace Mera.Quiz.Domain.Services
             _answerRepository = answerRepository;
         }
 
-        public async Task<QuestionModel> CreateQuestionAsync(QuestionModel questionModel)
-        {
-            
-            QuestionModel newQuestionModel = questionModel;
-            var newQuestionEntity = _mapper.Map<QuestionModel, Question>(newQuestionModel);
-              
-            var createdQuestionEntity = await _questionRepository.CreateQuestionAsync(newQuestionEntity);
-            var createdQuestionModel = _mapper.Map<Question, QuestionModel>(createdQuestionEntity);
-
-            return createdQuestionModel;
-        }
+        #region Queries
 
         public async Task<List<QuestionModel>> GetAllQuestionsAsync()
         {
@@ -50,6 +40,58 @@ namespace Mera.Quiz.Domain.Services
             var questionModel = _mapper.Map<Question, QuestionModel>(questionEntity);
 
             return questionModel;
+        }
+
+        #endregion
+
+        public async Task<QuestionModel> CreateQuestionAsync(QuestionModel questionModel)
+        {
+
+            QuestionModel newQuestionModel = questionModel;
+            var newQuestionEntity = _mapper.Map<QuestionModel, Question>(newQuestionModel);
+
+            var createdQuestionEntity = await _questionRepository.CreateQuestionAsync(newQuestionEntity);
+            var createdQuestionModel = _mapper.Map<Question, QuestionModel>(createdQuestionEntity);
+
+            return createdQuestionModel;
+        }
+
+        public async Task<QuestionModel> UpdateQuestionAnswersAsync(QuestionModel questionModel)
+        {
+            if(NoCorrectAnswers(questionModel.AnswerList))
+            {
+                return null;
+            }
+
+            var newQuestionEntity = _mapper.Map<QuestionModel, Question>(questionModel);
+
+            var updatedQuestionEntity = await _questionRepository.UpdateQuestionAnswersAsync(newQuestionEntity);
+            var updatedQuestionModel = _mapper.Map<Question, QuestionModel>(updatedQuestionEntity);
+
+            return updatedQuestionModel;
+        }
+
+        private bool NoCorrectAnswers(List<AnswerModel> answerList)
+        {
+            foreach (AnswerModel answer in answerList)
+            {
+                if (answer.isCorrect)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        public async Task<QuestionModel> UpdateQuestionTextAsync(QuestionModel questionModel)
+        {
+            
+            var newQuestionEntity = _mapper.Map<QuestionModel, Question>(questionModel);
+
+            var updatedQuestionEntity = await _questionRepository.UpdateQuestionTextAsync(newQuestionEntity);
+            var updatedQuestionModel = _mapper.Map<Question, QuestionModel>(updatedQuestionEntity);
+
+            return updatedQuestionModel;
         }
     }
 }

@@ -50,10 +50,6 @@ namespace Mera.Quiz.API.Controllers
         //Napravi svoj QuestionModel u QuizUI koji ce biti isti kao domain model i prosledi potrebne parametre u Insert Question
         public async Task<IActionResult> InsertQuestion(QuestionModel questionModel)
         {
-            //string questionText, List<AnswerModel> answerList, AnswerModel correctAnswer
-            //string questionText = data["questionText"].ToString();
-            //IEnumerable<AnswerModel> answerList = data["answerList"].ToObject<List<AnswerModel>>();
-            //AnswerModel correctAnswer = data["correctAnswer"].ToObject<AnswerModel>();
 
             var command = new CreateQuestionCommand(questionModel);
             var question = await _mediator.Send(command);
@@ -64,15 +60,30 @@ namespace Mera.Quiz.API.Controllers
         // PUT api/<QuestionController>/5/text
         // Used to edit the question text
         [HttpPut("{id}/text")]
-        public void PutText(int id, [FromBody] string value)
+        public async Task<IActionResult> PutText(QuestionModel questionModel)
         {
+            var command = new UpdateQuestionTextCommand(questionModel);
+            var question = await _mediator.Send(command);
+
+            return question != null ? (IActionResult)Ok(question) : NotFound();
         }
 
         // PUT api/<QuestionController>/5/answers
         // Used to edit the question answers
         [HttpPut("{id}/answers")]
-        public void PutAnswers(int id, [FromBody] string value)
+        public async Task<IActionResult> PutAnswers(QuestionModel questionModel)
         {
+            //Check if we have any answers in the list
+            if(questionModel.AnswerList != null)
+            {
+                var command = new UpdateQuestionAnswersCommand(questionModel);
+                var question = await _mediator.Send(command);
+
+                return question != null ? (IActionResult)Ok(question) : NotFound();
+            }
+            return NotFound("Can't pass an empty answer list!");
+
+
         }
 
         // DELETE api/<QuestionController>/5

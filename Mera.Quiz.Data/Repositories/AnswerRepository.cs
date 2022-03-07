@@ -43,21 +43,33 @@ namespace Mera.Quiz.Data.Repositories
         public async Task<Answer> UpdateAnswerAsync(Answer answer)
         {
             var entityAnswer = _context.Answers.Find(answer.ID);
-            entityAnswer.AnswerText = answer.AnswerText;
-            entityAnswer.isCorrect = answer.isCorrect;
-            await _context.SaveChangesAsync();
+            if(entityAnswer != null) 
+            {
+                entityAnswer.AnswerText = answer.AnswerText;
+                entityAnswer.isCorrect = answer.isCorrect;
+                await _context.SaveChangesAsync();
+            }
+            
             return entityAnswer;
         }
 
         public async Task<bool> DeleteAnswerAsync(int id)
         {
-            //var entityAnswer = _context.Answers.Find(id);
-            //_context.Answers.Remove(entityAnswer);
+
             var entityAnswer = new Answer() { ID = id };
             _context.Entry(entityAnswer).State = Microsoft.EntityFrameworkCore.EntityState.Deleted;
 
-            int isDeleted = await _context.SaveChangesAsync();
-            return isDeleted != 0 ? true : false;
+            //Checking if answer was actually deleted
+            var isDeleted = 0;
+            try
+            {
+                isDeleted = await _context.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                isDeleted = 0;
+            }
+            return isDeleted != 0;
         }
 
 

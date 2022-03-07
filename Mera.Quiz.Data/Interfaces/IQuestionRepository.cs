@@ -12,5 +12,7 @@ namespace Mera.Quiz.Data.Interfaces
         Task<List<Question>> GetAllQuestionsAsync();
         Task<Question> GetQuestionAsync(int id);
         Task<Question> CreateQuestionAsync(Question newQuestionEntity);
+        Task<Question> UpdateQuestionTextAsync(Question newQuestionEntity);
+        Task<Question> UpdateQuestionAnswersAsync(Question newQuestionEntity);
     }
 }

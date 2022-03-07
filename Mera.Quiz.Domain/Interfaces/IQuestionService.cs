@@ -12,5 +12,7 @@ namespace Mera.Quiz.Domain.Interfaces
         Task<List<QuestionModel>> GetAllQuestionsAsync();
         Task<QuestionModel> GetQuestionAsync(int id);
         Task<QuestionModel> CreateQuestionAsync(QuestionModel questionModel);
+        Task<QuestionModel> UpdateQuestionTextAsync(QuestionModel questionModel);
+        Task<QuestionModel> UpdateQuestionAnswersAsync(QuestionModel questionModel);
     }
 }
