@@ -9,11 +9,11 @@ namespace Mera.Quiz.API.Adapters.Commands
 {
     public class CreateAnswerCommand : IRequest<AnswerModel>
     {
-        public string AnswerText { get; set; }
+        public AnswerModel answerModel { get; set; }
 
-        public CreateAnswerCommand(string answerText)
+        public CreateAnswerCommand(AnswerModel answerModel)
         {
-            AnswerText = answerText;
+            this.answerModel = answerModel;
         }
     }
 }

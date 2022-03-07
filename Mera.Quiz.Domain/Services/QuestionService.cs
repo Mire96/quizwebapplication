@@ -27,7 +27,7 @@ namespace Mera.Quiz.Domain.Services
         public async Task<QuestionModel> CreateQuestionAsync(string questionText, List<AnswerModel> answerList, AnswerModel correctAnswer)
         {
             //Mapping QuestionModel -> Question
-            QuestionModel newQuestionModel = new QuestionModel(questionText, answerList, correctAnswer);
+            QuestionModel newQuestionModel = new QuestionModel(questionText, answerList);
             var newQuestionEntity = _mapper.Map<QuestionModel, Question>(newQuestionModel);
 
             //Adding answers to database first to avoid circularity

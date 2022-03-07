@@ -43,20 +43,20 @@ namespace Mera.Quiz.API.Controllers
 
         // POST api/<AnswerController>
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] string value)
+        public async Task<IActionResult> Post(AnswerModel answerModel)
         {
-            var command = new CreateAnswerCommand(value);
+            var command = new CreateAnswerCommand(answerModel);
             var answer = await _mediator.Send(command);
             return answer.ID != -1 ? (IActionResult)Ok(answer) : NotFound();
         }
 
         // PUT api/<AnswerController>/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, [FromBody] string value)
+        public async Task<IActionResult> Put(AnswerModel answerModel)
         {
-            var command = new UpdateAnswerCommand(id, value);
+            var command = new UpdateAnswerCommand(answerModel);
             var answer = await _mediator.Send(command);
-            return answer.AnswerText == value ? (IActionResult)Ok(answer) : NotFound();
+            return answer.Equals(answerModel) ? (IActionResult)Ok(answer) : NotFound();
         }
 
         // DELETE api/<AnswerController>/5

@@ -44,6 +44,7 @@ namespace Mera.Quiz.Data.Repositories
         {
             var entityAnswer = _context.Answers.Find(answer.ID);
             entityAnswer.AnswerText = answer.AnswerText;
+            entityAnswer.isCorrect = answer.isCorrect;
             await _context.SaveChangesAsync();
             return entityAnswer;
         }

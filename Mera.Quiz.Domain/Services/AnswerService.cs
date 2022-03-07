@@ -30,7 +30,6 @@ namespace Mera.Quiz.Domain.Services
         {
             var answerEntities = await _answerRepository.GetAllAnswersAsync();
             var answerModels = _mapper.Map<List<Answer>,List<AnswerModel>>(answerEntities);
-            //var answerModels = _mapper.Map(answerEntities, typeof(List<AnswerModel>));
             return answerModels;
         }
 
@@ -41,9 +40,9 @@ namespace Mera.Quiz.Domain.Services
             return answerModel;
         }
 
-        public async Task<AnswerModel> CreateAnswerAsync(string answer)
+        public async Task<AnswerModel> CreateAnswerAsync(AnswerModel answerModel)
         {
-            AnswerModel newAnswerModel = new AnswerModel(answer);
+            AnswerModel newAnswerModel = answerModel;
             Answer newAnswerEntity = _mapper.Map<AnswerModel, Answer>(newAnswerModel);
 
             var createdAnswerEntity = await _answerRepository.CreateAnswerAsync(newAnswerEntity);
@@ -52,9 +51,9 @@ namespace Mera.Quiz.Domain.Services
             return createdAnswerModel;
         }
 
-        public async Task<AnswerModel> UpdateAnswerAsync(int id, string answerText)
+        public async Task<AnswerModel> UpdateAnswerAsync(AnswerModel answerModel)
         {
-            AnswerModel newAnswerModel = new AnswerModel(id, answerText);
+            AnswerModel newAnswerModel = answerModel;
             Answer newAnswerEntity = _mapper.Map<AnswerModel, Answer>(newAnswerModel);
 
             var updatedAnswerEntity = await _answerRepository.UpdateAnswerAsync(newAnswerEntity);

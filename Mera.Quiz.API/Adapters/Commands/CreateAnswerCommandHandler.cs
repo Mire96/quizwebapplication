@@ -20,7 +20,7 @@ namespace Mera.Quiz.API.Adapters.Commands
 
         public async Task<AnswerModel> Handle(CreateAnswerCommand request, CancellationToken cancellationToken)
         {
-            return await _answerService.CreateAnswerAsync(request.AnswerText);
+            return await _answerService.CreateAnswerAsync(request.answerModel);
         }
     }
 }
