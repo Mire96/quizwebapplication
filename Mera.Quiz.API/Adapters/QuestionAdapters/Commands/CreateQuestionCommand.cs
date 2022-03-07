@@ -9,15 +9,11 @@ namespace Mera.Quiz.API.Adapters.QuestionAdapters.Commands
 {
     public class CreateQuestionCommand : IRequest<QuestionModel>
     {
-        public string QuestionText { get; set; }
-        public List<AnswerModel> AnswerList { get; set; }
-        public AnswerModel CorrectAnswer { get; set; }
+        public QuestionModel questionModel { get; set; }
 
-        public CreateQuestionCommand(string questionText, IEnumerable<AnswerModel> answerList, AnswerModel correctAnswer)
+        public CreateQuestionCommand(QuestionModel questionModel)
         {
-            QuestionText = questionText;
-            AnswerList = answerList.ToList();
-            CorrectAnswer = correctAnswer;
+            this.questionModel = questionModel;
         }
     }
 }

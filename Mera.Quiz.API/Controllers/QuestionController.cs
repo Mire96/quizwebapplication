@@ -48,14 +48,14 @@ namespace Mera.Quiz.API.Controllers
         [HttpPost]
         [Route("insert")]
         //Napravi svoj QuestionModel u QuizUI koji ce biti isti kao domain model i prosledi potrebne parametre u Insert Question
-        public async Task<IActionResult> InsertQuestion(JObject data)
+        public async Task<IActionResult> InsertQuestion(QuestionModel questionModel)
         {
             //string questionText, List<AnswerModel> answerList, AnswerModel correctAnswer
-            string questionText = data["questionText"].ToString();
-            IEnumerable<AnswerModel> answerList = data["answerList"].ToObject<List<AnswerModel>>();
-            AnswerModel correctAnswer = data["correctAnswer"].ToObject<AnswerModel>();
+            //string questionText = data["questionText"].ToString();
+            //IEnumerable<AnswerModel> answerList = data["answerList"].ToObject<List<AnswerModel>>();
+            //AnswerModel correctAnswer = data["correctAnswer"].ToObject<AnswerModel>();
 
-            var command = new CreateQuestionCommand(questionText, answerList, correctAnswer);
+            var command = new CreateQuestionCommand(questionModel);
             var question = await _mediator.Send(command);
 
             return question.ID != -1 ? (IActionResult)Ok(question) : NotFound();
