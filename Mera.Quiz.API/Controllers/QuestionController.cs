@@ -74,22 +74,26 @@ namespace Mera.Quiz.API.Controllers
         public async Task<IActionResult> PutAnswers(QuestionModel questionModel)
         {
             //Check if we have any answers in the list
-            if(questionModel.AnswerList != null)
+            if(questionModel.AnswerList != null && questionModel.AnswerList.Count > 1)
             {
                 var command = new UpdateQuestionAnswersCommand(questionModel);
                 var question = await _mediator.Send(command);
 
                 return question != null ? (IActionResult)Ok(question) : NotFound();
             }
-            return NotFound("Can't pass an empty answer list!");
+            return NotFound("Can't pass a list with less than 2 answers");
 
 
         }
 
         // DELETE api/<QuestionController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
+
+            var command = new DeleteQuestionCommand(id);
+            bool deleteAnswerSuccesful = await _mediator.Send(command);
+            return deleteAnswerSuccesful ? (IActionResult)Ok() : NotFound();
         }
     }
 }

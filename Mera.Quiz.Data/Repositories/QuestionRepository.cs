@@ -71,7 +71,7 @@ namespace Mera.Quiz.Data.Repositories
             var updateQuestionEntity = await _context.Questions.FindAsync(newQuestionEntity.ID);
             _context.Entry(updateQuestionEntity).Collection(a => a.AnswerList).Load();
 
-
+            //Potencijalno istraziti bolji nacin bez ovog if i foreach
             if (updateQuestionEntity != null)
             {
                 foreach (Answer answer in updateQuestionEntity.AnswerList)
@@ -88,6 +88,30 @@ namespace Mera.Quiz.Data.Repositories
             }
 
             return updateQuestionEntity;
+        }
+
+        public async Task<bool> DeleteQuestionAsync(int id)
+        {
+            //Loading Question entity and it's answers to delete
+            var entityQuestion = _context.Questions.Find(id);
+            _context.Entry(entityQuestion).Collection(a => a.AnswerList).Load();
+
+            //Removing them from the context
+            _context.Answers.RemoveRange(entityQuestion.AnswerList);
+            _context.Questions.Remove(entityQuestion);
+
+            var isDeleted = 0;
+            //Trying to save changes 
+            try
+            {
+                isDeleted = await _context.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                isDeleted = 0;
+            }
+            return isDeleted != 0;
+            
         }
 
 

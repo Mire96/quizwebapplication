@@ -21,8 +21,7 @@ namespace Mera.Quiz.Data.Repositories
 
         public async Task<List<Answer>> GetAllAnswersAsync()
         {
-            var testanswers = await _context.Answers.ToListAsync();
-            var entityAnswers = _context.Answers.ToList();
+            var entityAnswers = await _context.Answers.ToListAsync();
             return entityAnswers;
         }
 
@@ -42,8 +41,8 @@ namespace Mera.Quiz.Data.Repositories
 
         public async Task<Answer> UpdateAnswerAsync(Answer answer)
         {
-            var entityAnswer = _context.Answers.Find(answer.ID);
-            if(entityAnswer != null) 
+            var entityAnswer = await GetAnswerAsync(answer.ID);
+            if (entityAnswer != null) 
             {
                 entityAnswer.AnswerText = answer.AnswerText;
                 entityAnswer.isCorrect = answer.isCorrect;
@@ -57,7 +56,7 @@ namespace Mera.Quiz.Data.Repositories
         {
 
             var entityAnswer = new Answer() { ID = id };
-            _context.Entry(entityAnswer).State = Microsoft.EntityFrameworkCore.EntityState.Deleted;
+            _context.Entry(entityAnswer).State = EntityState.Deleted;
 
             //Checking if answer was actually deleted
             var isDeleted = 0;
@@ -79,5 +78,7 @@ namespace Mera.Quiz.Data.Repositories
             //_context.SaveChanges();
             return answerList;
         }
+
+        
     }
 }

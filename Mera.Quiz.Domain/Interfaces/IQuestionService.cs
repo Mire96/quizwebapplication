@@ -14,5 +14,6 @@ namespace Mera.Quiz.Domain.Interfaces
         Task<QuestionModel> CreateQuestionAsync(QuestionModel questionModel);
         Task<QuestionModel> UpdateQuestionTextAsync(QuestionModel questionModel);
         Task<QuestionModel> UpdateQuestionAnswersAsync(QuestionModel questionModel);
+        Task<bool> DeleteQuestionAsync(int id);
     }
 }

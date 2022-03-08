@@ -93,5 +93,12 @@ namespace Mera.Quiz.Domain.Services
 
             return updatedQuestionModel;
         }
+
+        public async Task<bool> DeleteQuestionAsync(int id)
+        {
+
+            bool deleteQuestionSuccessful = await _questionRepository.DeleteQuestionAsync(id);
+            return deleteQuestionSuccessful;
+        }
     }
 }
