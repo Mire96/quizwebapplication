@@ -57,11 +57,18 @@ namespace Mera.Quiz.API
             services.AddScoped<IAnswerRepository, AnswerRepository>();
             services.AddScoped<IQuestionService, QuestionService> ();
             services.AddScoped<IQuestionRepository, QuestionRepository>();
+            services.AddScoped<ITestService, TestService>();
+            services.AddScoped<ITestRepository, TestRepository>();
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IUserRepository, UserRepository>();
 
 
             //Mapping profiles
             services.AddAutoMapper(typeof(AnswerMappingProfile));
             services.AddAutoMapper(typeof(QuestionMappingProfile));
+            services.AddAutoMapper(typeof(TestMappingProfile));
+            services.AddAutoMapper(typeof(UserMappingProfile));
+            services.AddAutoMapper(typeof(TestScoreMappingProfile));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

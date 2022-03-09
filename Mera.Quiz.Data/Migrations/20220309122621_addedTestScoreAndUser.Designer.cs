@@ -4,14 +4,16 @@ using Mera.Quiz.Data.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Mera.Quiz.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220309122621_addedTestScoreAndUser")]
+    partial class addedTestScoreAndUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -127,11 +129,6 @@ namespace Mera.Quiz.Data.Migrations
                         .HasColumnType("varchar(20)")
                         .HasColumnName("Password");
 
-                    b.Property<string>("Role")
-                        .IsRequired()
-                        .HasColumnType("varchar(20)")
-                        .HasColumnName("Role");
-
                     b.Property<string>("UserName")
                         .IsRequired()
                         .HasColumnType("varchar(20)")
@@ -158,21 +155,21 @@ namespace Mera.Quiz.Data.Migrations
 
             modelBuilder.Entity("Mera.Quiz.Data.Entities.TestScore", b =>
                 {
-                    b.HasOne("Mera.Quiz.Data.Entities.Test", "Test")
+                    b.HasOne("Mera.Quiz.Data.Entities.Test", "TestName")
                         .WithMany()
                         .HasForeignKey("TestNameFK")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Mera.Quiz.Data.Entities.User", "User")
+                    b.HasOne("Mera.Quiz.Data.Entities.User", "UserName")
                         .WithMany()
                         .HasForeignKey("UserNameFK")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Test");
+                    b.Navigation("TestName");
 
-                    b.Navigation("User");
+                    b.Navigation("UserName");
                 });
 
             modelBuilder.Entity("Mera.Quiz.Data.Entities.Question", b =>

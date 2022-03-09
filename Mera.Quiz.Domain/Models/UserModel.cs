@@ -6,12 +6,11 @@ using System.Threading.Tasks;
 
 namespace Mera.Quiz.Domain.Models
 {
-    public class PlayerModel
+    public class UserModel
     {
         public int ID { get; set; }
-        public List<TestModel> PassedTestList { get; set; }
-        public string Name { get; set; }
-        public string Surname { get; set; }
+        public string UserName { get; set; }
+        public string Password { get; set; }
         public RoleModel Role { get; set; }
     }
 }
