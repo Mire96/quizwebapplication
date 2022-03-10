@@ -1,6 +1,8 @@
-﻿using MediatR;
+﻿using FluentValidation.Results;
+using MediatR;
 using Mera.Quiz.API.Adapters.QuestionAdapters.Commands;
 using Mera.Quiz.API.Adapters.QuestionAdapters.Queries;
+using Mera.Quiz.API.Validation;
 using Mera.Quiz.Domain.Models;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
@@ -47,7 +49,6 @@ namespace Mera.Quiz.API.Controllers
         // POST api/<QuestionController>
         [HttpPost]
         [Route("insert")]
-        //Napravi svoj QuestionModel u QuizUI koji ce biti isti kao domain model i prosledi potrebne parametre u Insert Question
         public async Task<IActionResult> InsertQuestion(QuestionModel questionModel)
         {
 
@@ -55,6 +56,17 @@ namespace Mera.Quiz.API.Controllers
             var question = await _mediator.Send(command);
 
             return question.ID != -1 ? (IActionResult)Ok(question) : NotFound();
+        }
+
+        [HttpPost]
+        [Route("validate")]
+        public async Task<IActionResult> ValidateQuestion(QuestionModel questionModel)
+        {
+            QuestionValidator validator = new QuestionValidator();
+            ValidationResult result = validator.Validate(questionModel);
+
+            return result.IsValid ? Ok(questionModel) : BadRequest();
+            
         }
 
         // PUT api/<QuestionController>/5/text
