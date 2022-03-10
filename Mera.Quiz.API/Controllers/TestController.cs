@@ -74,10 +74,18 @@ namespace Mera.Quiz.API.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(TestModel testModel)
         {
-            var command = new UpdateTestCommand(testModel);
-            var test = await _mediator.Send(command);
+            UpdateTestValidator validator = new UpdateTestValidator();
+            ValidationResult result = validator.Validate(testModel);
 
-            return test != null ? Ok(test) : NotFound();
+            if (result.IsValid)
+            {
+                var command = new UpdateTestCommand(testModel);
+                var test = await _mediator.Send(command);
+
+                return test != null ? Ok(test) : NotFound();
+            }
+            return BadRequest();
+            
         }
 
         // DELETE api/<TestController>/5
