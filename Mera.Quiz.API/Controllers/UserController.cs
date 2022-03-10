@@ -1,11 +1,14 @@
-﻿using MediatR;
+﻿using FluentValidation.Results;
+using MediatR;
 using Mera.Quiz.API.Adapters.UserAdapters.Commands;
 using Mera.Quiz.API.Adapters.UserAdapters.Queries;
+using Mera.Quiz.API.Validation;
 using Mera.Quiz.Domain.Models;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -34,31 +37,34 @@ namespace Mera.Quiz.API.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> VerifyUserAsync(UserModel userModel)
         {
-            var query = new GetUserQuery(userModel);
-            var user = await _mediator.Send(query);
+            UserValidator validator = new UserValidator();
+            ValidationResult result = validator.Validate(userModel);
+            if (result.IsValid)
+            {
+                var query = new GetUserQuery(userModel);
+                var user = await _mediator.Send(query);
 
-            return user != null ? (IActionResult)Ok(user) : NotFound();
+                return user != null ? (IActionResult)Ok(user) : NotFound();
+            }
+            return BadRequest();
+            
         }
-
+        // POST api/<UserController>/create
         [HttpPost("create")]
         public async Task<IActionResult> PostUser(UserModel userModel)
         {
-            var command = new CreateUserCommand(userModel);
-            var user = await _mediator.Send(command);
+            UserValidator validator = new UserValidator();
+            ValidationResult result = validator.Validate(userModel);
+            if (result.IsValid)
+            {
+                var command = new CreateUserCommand(userModel);
+                var user = await _mediator.Send(command);
 
-            return user != null ? (IActionResult)Ok(user) : NotFound();
+                return user != null ? (IActionResult)Ok(user) : NotFound();
+            }
+            return BadRequest();
         }
 
-        // PUT api/<UserController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE api/<UserController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
+        
     }
 }
