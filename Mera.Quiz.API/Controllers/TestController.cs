@@ -1,6 +1,8 @@
-﻿using MediatR;
+﻿using FluentValidation.Results;
+using MediatR;
 using Mera.Quiz.API.Adapters.TestAdapters.Commands;
 using Mera.Quiz.API.Adapters.TestAdapters.Queries;
+using Mera.Quiz.API.Validation;
 using Mera.Quiz.Domain.Models;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -44,10 +46,17 @@ namespace Mera.Quiz.API.Controllers
         [HttpPost]
         public async Task<IActionResult> Post(TestModel testModel)
         {
-            var command = new CreateTestCommand(testModel);
-            var test = await _mediator.Send(command);
+            TestValidator validator = new TestValidator();
+            ValidationResult result = validator.Validate(testModel);
 
-            return test.ID != 0 ? Ok(test) : NotFound();
+            if (result.IsValid)
+            {
+                var command = new CreateTestCommand(testModel);
+                var test = await _mediator.Send(command);
+
+                return test.ID != 0 ? Ok(test) : NotFound(); 
+            }
+            return BadRequest();
         }
 
         // POST api/<TestController>/5/Score

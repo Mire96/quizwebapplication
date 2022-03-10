@@ -11,9 +11,9 @@ namespace Mera.Quiz.API.Validation
     {
         public TestValidator()
         {
-            RuleFor(x => x.QuestionList.Count > 1);
+            RuleFor(x => x.QuestionList.Count).GreaterThan(1);
             RuleForEach(question => question.QuestionList).SetValidator(new QuestionValidator());
-            RuleFor(test => test.TestName).NotEmpty();
+            RuleFor(test => test.TestName).NotEmpty().MaximumLength(19);
 
         }
     }

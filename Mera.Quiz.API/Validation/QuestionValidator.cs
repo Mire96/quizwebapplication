@@ -13,7 +13,7 @@ namespace Mera.Quiz.API.Validation
         {
             RuleFor(question => question.QuestionText).NotEmpty();
             RuleForEach(answers => answers.AnswerList).SetValidator(new AnswerValidator());
-            RuleFor(question => question.AnswerList.Count > 1);
+            RuleFor(question => question.AnswerList.Count).GreaterThan(1);
             //Ensures at least 1 answer is correct
             RuleFor(question => question.AnswerList)
                 .Must(answers => answers.Any(answer => answer.isCorrect));
