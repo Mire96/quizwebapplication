@@ -63,11 +63,20 @@ namespace Mera.Quiz.API.Controllers
         [HttpPost("{id}/Score")]
         public async Task<IActionResult> PostTestScore(TestModel testModel)
         {
-            var command = new CreateTestScoreCommand(testModel);
-            var test = await _mediator.Send(command);
+            TestScoreValidator validator = new TestScoreValidator();
+            ValidationResult result = validator.Validate(testModel);
 
-            //This returns the ID of the test score in the database
-            return test != 0 ? Ok(test) : NotFound();
+            if (result.IsValid)
+            {
+                var command = new CreateTestScoreCommand(testModel);
+                var test = await _mediator.Send(command);
+
+                //This returns the ID of the test score in the database
+                return test != 0 ? Ok(test) : NotFound();
+            }
+
+            return BadRequest();
+            
         }
 
         // PUT api/<TestController>/5
