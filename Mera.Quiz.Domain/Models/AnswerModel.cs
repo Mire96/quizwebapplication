@@ -10,18 +10,18 @@ namespace Mera.Quiz.Domain.Models
     {
         public int ID { get; set; }
         public string AnswerText { get; set; }
-        public bool isCorrect { get; set; }
+        public bool isChosen { get; set; }
 
         public AnswerModel()
         {
 
         }
 
-        public AnswerModel(string answerText, bool isCorrect)
+        public AnswerModel(string answerText, bool isChosen)
         {
             ID = -1;
             AnswerText = answerText;
-            this.isCorrect = isCorrect;
+            this.isChosen = isChosen;
         }
 
 
@@ -30,7 +30,7 @@ namespace Mera.Quiz.Domain.Models
             return obj is AnswerModel model &&
                    ID == model.ID &&
                    AnswerText == model.AnswerText &&
-                   isCorrect == model.isCorrect;
+				   isChosen == model.isChosen;
         }
     }
 }

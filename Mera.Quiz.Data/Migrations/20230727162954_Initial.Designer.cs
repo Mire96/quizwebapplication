@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Mera.Quiz.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20220309161140_changingBackTestScoreFK1")]
-    partial class changingBackTestScoreFK1
+    [Migration("20230727162954_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -37,9 +37,9 @@ namespace Mera.Quiz.Data.Migrations
                     b.Property<int?>("QuestionID")
                         .HasColumnType("int");
 
-                    b.Property<bool>("isCorrect")
+                    b.Property<bool>("isChosen")
                         .HasColumnType("bit")
-                        .HasColumnName("isCorrect");
+                        .HasColumnName("isChosen");
 
                     b.HasKey("ID");
 
@@ -56,6 +56,9 @@ namespace Mera.Quiz.Data.Migrations
                         .HasColumnName("id")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int?>("CorrectAnswerID")
+                        .HasColumnType("int");
+
                     b.Property<string>("QuestionText")
                         .IsRequired()
                         .HasColumnType("varchar(1000)")
@@ -65,6 +68,8 @@ namespace Mera.Quiz.Data.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("ID");
+
+                    b.HasIndex("CorrectAnswerID");
 
                     b.HasIndex("TestID");
 
@@ -153,9 +158,15 @@ namespace Mera.Quiz.Data.Migrations
 
             modelBuilder.Entity("Mera.Quiz.Data.Entities.Question", b =>
                 {
+                    b.HasOne("Mera.Quiz.Data.Entities.Answer", "CorrectAnswer")
+                        .WithMany()
+                        .HasForeignKey("CorrectAnswerID");
+
                     b.HasOne("Mera.Quiz.Data.Entities.Test", null)
                         .WithMany("QuestionList")
                         .HasForeignKey("TestID");
+
+                    b.Navigation("CorrectAnswer");
                 });
 
             modelBuilder.Entity("Mera.Quiz.Data.Entities.TestScore", b =>

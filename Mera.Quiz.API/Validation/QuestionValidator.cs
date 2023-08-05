@@ -15,8 +15,7 @@ namespace Mera.Quiz.API.Validation
             RuleForEach(answers => answers.AnswerList).SetValidator(new AnswerValidator());
             RuleFor(question => question.AnswerList.Count).GreaterThan(1);
             //Ensures at least 1 answer is correct
-            RuleFor(question => question.AnswerList)
-                .Must(answers => answers.Any(answer => answer.isCorrect));
+            RuleFor(question => question.CorrectAnswer).NotEmpty();
         }
     }
 }

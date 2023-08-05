@@ -70,8 +70,10 @@ namespace Mera.Quiz.Data.Repositories
             //Loads all tests, .Include loads all tests questions, .ThenInclude loads all questions answers
             var entityTests = await _context.Tests
                 .Include(t => t.QuestionList)
-                .ThenInclude(q => q.AnswerList)
-                .ToListAsync();
+                    .ThenInclude(q => q.AnswerList)
+				.Include(t => t.QuestionList)
+			        .ThenInclude(q => q.CorrectAnswer)
+				.ToListAsync();
             return entityTests;
         }
 

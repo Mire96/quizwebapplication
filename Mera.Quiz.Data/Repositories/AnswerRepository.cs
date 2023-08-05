@@ -45,7 +45,7 @@ namespace Mera.Quiz.Data.Repositories
             if (entityAnswer != null) 
             {
                 entityAnswer.AnswerText = answer.AnswerText;
-                entityAnswer.isCorrect = answer.isCorrect;
+                entityAnswer.isChosen = answer.isChosen;
                 await _context.SaveChangesAsync();
             }
             

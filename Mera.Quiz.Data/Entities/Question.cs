@@ -20,6 +20,11 @@ namespace Mera.Quiz.Data.Entities
         [Required]
         public string QuestionText { get; set; }
 
+		[ForeignKey("CorrectAnswer")] // Foreign key to the CorrectAnswer
+		[Column("correctanswer_id")]
+		public int CorrectAnswerID { get; set; }
+		public Answer CorrectAnswer { get; set; }
+
         public List<Answer> AnswerList { get; set; }
 
 

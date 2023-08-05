@@ -46,7 +46,6 @@ namespace Mera.Quiz.Domain.Services
 
         public async Task<QuestionModel> CreateQuestionAsync(QuestionModel questionModel)
         {
-
             QuestionModel newQuestionModel = questionModel;
             var newQuestionEntity = _mapper.Map<QuestionModel, Question>(newQuestionModel);
 
@@ -58,7 +57,7 @@ namespace Mera.Quiz.Domain.Services
 
         public async Task<QuestionModel> UpdateQuestionAnswersAsync(QuestionModel questionModel)
         {
-            if(NoCorrectAnswers(questionModel.AnswerList))
+            if(NoCorrectAnswer(questionModel))
             {
                 return null;
             }
@@ -71,11 +70,16 @@ namespace Mera.Quiz.Domain.Services
             return updatedQuestionModel;
         }
 
+        private bool NoCorrectAnswer(QuestionModel question)
+        {
+            return question.CorrectAnswer == null;
+        }
+        
         private bool NoCorrectAnswers(List<AnswerModel> answerList)
         {
             foreach (AnswerModel answer in answerList)
             {
-                if (answer.isCorrect)
+                if (answer.isChosen)
                 {
                     return false;
                 }
