@@ -15,6 +15,7 @@ namespace Mera.Quiz.Data.Database
         public DbSet<Test> Tests { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<TestScore> TestScores { get; set; }
+        public DbSet<UserAnswers> UserAnswers { get; set; }
 
 
 
@@ -22,9 +23,23 @@ namespace Mera.Quiz.Data.Database
         {
 
         }
-        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        //{
-        //    optionsBuilder.UseSqlServer(@"Server=RSM2463\BARBOOKSDATABASE;Database=QuizDatabase;Trusted_Connection=True");
-        //}
-    }
+
+		protected override void OnModelCreating(ModelBuilder modelBuilder)
+		{
+			modelBuilder.Entity<UserAnswers>()
+                .HasOne(ua => ua.ChosenAnswer)
+				.WithMany() 
+				.HasForeignKey(ua => ua.ChosenAnswerFK)
+				.OnDelete(DeleteBehavior.NoAction);
+			modelBuilder.Entity<UserAnswers>()
+				.HasOne(ua => ua.Question)
+				.WithMany()
+				.HasForeignKey(ua => ua.QuestionFK)
+				.OnDelete(DeleteBehavior.NoAction);
+		}
+		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+		{
+			//optionsBuilder.UseSqlServer(@"Server=RSM2463\BARBOOKSDATABASE;Database=QuizDatabase;Trusted_Connection=True");
+		}
+	}
 }

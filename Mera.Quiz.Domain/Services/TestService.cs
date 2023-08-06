@@ -30,10 +30,11 @@ namespace Mera.Quiz.Domain.Services
             var createdTestModel = _mapper.Map<Test, TestModel>(createdTestEntity);
             return createdTestModel;
         }
+		
 
-        public async Task<int> CreateTestScoreAsync(TestModel testModel)
+		public async Task<int> CreateTestScoreAsync(TestScoreModel testScoreModel)
         {
-            var newTestScoreEntity = _mapper.Map<TestModel, TestScore>(testModel);
+            var newTestScoreEntity = _mapper.Map<TestScoreModel, TestScore>(testScoreModel);
             var createdTestScoreEntity = await _testRepository.CreateTestScoreAsync(newTestScoreEntity);
 
             return createdTestScoreEntity.ID;
@@ -54,7 +55,21 @@ namespace Mera.Quiz.Domain.Services
 
         }
 
-        public async Task<TestModel> UpdateTestAsync(TestModel testModel)
+		public async Task<List<TestScoreModel>> GetAllTestScoresByUser(int userId)
+		{
+			List<TestScore> testScoreEntities = await _testRepository.GetAllTestScoresByUserAsync(userId);
+            List<TestScoreModel> testScoreModels = _mapper.Map<List<TestScore>, List<TestScoreModel>>(testScoreEntities);
+            return testScoreModels;
+		}
+
+		public async Task<TestScoreModel> GetTestScoreAsync(int testScoreId)
+		{
+            var testScoreEntity = await _testRepository.GetTestScoreAsync(testScoreId);
+            var testScoreModel = _mapper.Map<TestScore, TestScoreModel>(testScoreEntity);
+            return testScoreModel;
+        }
+
+		public async Task<TestModel> UpdateTestAsync(TestModel testModel)
         {
             var newTestEntity = _mapper.Map<TestModel, Test>(testModel);
             var updatedTestEntity = await _testRepository.UpdateTestAsync(newTestEntity);

@@ -9,13 +9,13 @@ using System.Threading.Tasks;
 
 namespace Mera.Quiz.Domain.Mappers
 {
-    public class TestScoreMappingProfile : Profile
-    {
-        public TestScoreMappingProfile()
-        {
-            CreateMap<TestScoreModel, TestScore>();
+	public class UserAnswersMappingProfile : Profile
+	{
+		public UserAnswersMappingProfile()
+		{
+			CreateMap<UserAnswersModel, UserAnswers>();
 
-            CreateMap<TestScore, TestScoreModel>();
-        }
-    }
+			CreateMap<UserAnswers, UserAnswersModel>();
+		}
+	}
 }

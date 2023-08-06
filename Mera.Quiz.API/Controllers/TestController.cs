@@ -25,8 +25,18 @@ namespace Mera.Quiz.API.Controllers
             _mediator = mediator;
         }
 
-        // GET: api/<TestController>
-        [HttpGet]
+		[HttpGet("{id}/score")]
+		public async Task<IActionResult> GetTestScore(int id)
+		{
+			var query = new GetTestScoreQuery(id);
+			var testScore = await _mediator.Send(query);
+
+			return testScore != null ? (IActionResult)Ok(testScore) : NotFound();
+		}
+
+		#region CRUD for Tests
+		// GET: api/<TestController>
+		[HttpGet]
         public async Task<IActionResult> Get()
         {
             var query = new GetAllTestsQuery();
@@ -59,16 +69,16 @@ namespace Mera.Quiz.API.Controllers
             return BadRequest();
         }
 
-        // POST api/<TestController>/5/Score
-        [HttpPost("{id}/Score")]
-        public async Task<IActionResult> PostTestScore(TestModel testModel)
+        // POST api/<TestController>/Score
+        [HttpPost("Score")]
+        public async Task<IActionResult> PostTestScore(TestScoreModel testScoreModel)
         {
             TestScoreValidator validator = new TestScoreValidator();
-            ValidationResult result = validator.Validate(testModel);
+            ValidationResult result = validator.Validate(testScoreModel);
 
             if (result.IsValid)
             {
-                var command = new CreateTestScoreCommand(testModel);
+                var command = new CreateTestScoreCommand(testScoreModel);
                 var test = await _mediator.Send(command);
 
                 //This returns the ID of the test score in the database
@@ -107,5 +117,7 @@ namespace Mera.Quiz.API.Controllers
             return deleteTestSuccesful ? Ok() : NotFound();
 
         }
+
+        #endregion
     }
 }

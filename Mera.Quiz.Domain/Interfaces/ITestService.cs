@@ -11,8 +11,10 @@ namespace Mera.Quiz.Domain.Interfaces
     {
         public Task<List<TestModel>> GetAllTestsAsync();
         Task<TestModel> CreateTestAsync(TestModel testModel);
-        Task<int> CreateTestScoreAsync(TestModel testModel);
-        Task<TestModel> UpdateTestAsync(TestModel testModel);
+        Task<int> CreateTestScoreAsync(TestScoreModel testModel);
+        Task<TestScoreModel> GetTestScoreAsync(int testScoreId);
+		Task<List<TestScoreModel>>  GetAllTestScoresByUser(int userId);
+		Task<TestModel> UpdateTestAsync(TestModel testModel);
         Task<bool> DeleteTestAsync(int testId);
     }
 }

@@ -12,6 +12,6 @@ namespace Mera.Quiz.Domain.Models
         public string TestName { get; set; }
         public List<QuestionModel> QuestionList { get; set; }
         public UserModel UserName { get; set; }
-        public int Score { get; set; }
+        public TestScoreModel TestScore { get; set; }
     }
 }

@@ -22,7 +22,7 @@ namespace Mera.Quiz.API.Adapters.TestAdapters.Commands
 
         public async Task<int> Handle(CreateTestScoreCommand request, CancellationToken cancellationToken)
         {
-            return await _testService.CreateTestScoreAsync(request.testModel);
+            return await _testService.CreateTestScoreAsync(request.testScoreModel);
         }
     }
 }

@@ -47,6 +47,7 @@ namespace Mera.Quiz.API
             services.AddDbContext<AppDbContext>(options =>
             {
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
+                options.EnableSensitiveDataLogging();
             });
 
             //Mediator
@@ -69,6 +70,7 @@ namespace Mera.Quiz.API
             services.AddAutoMapper(typeof(TestMappingProfile));
             services.AddAutoMapper(typeof(UserMappingProfile));
             services.AddAutoMapper(typeof(TestScoreMappingProfile));
+            services.AddAutoMapper(typeof(UserAnswersMappingProfile));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -9,11 +9,11 @@ namespace Mera.Quiz.API.Adapters.TestAdapters.Commands
 {
     public class CreateTestScoreCommand : IRequest<int>
     {
-        public TestModel testModel { get; set; }
+        public TestScoreModel testScoreModel { get; set; }
 
-        public CreateTestScoreCommand(TestModel testModel)
+        public CreateTestScoreCommand(TestScoreModel testScoreModel)
         {
-            this.testModel = testModel;
+            this.testScoreModel = testScoreModel;
         }
     }
 }

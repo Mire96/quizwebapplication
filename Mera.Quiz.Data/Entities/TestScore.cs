@@ -28,10 +28,15 @@ namespace Mera.Quiz.Data.Entities
         [Required]
         public int UserNameFK { get; set; }
 
-        
+
         [Column("Score", TypeName = "int")]
         [Required]
         public int Score { get; set; }
 
+		[Column("DateTaken")]
+		[Required]
+		public DateTime DateTaken { get; set; }
+
+        public List<UserAnswers> UserAnswers { get; set; }
     }
 }

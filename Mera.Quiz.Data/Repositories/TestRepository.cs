@@ -28,9 +28,27 @@ namespace Mera.Quiz.Data.Repositories
 
         public async Task<TestScore> CreateTestScoreAsync(TestScore newTestScoreEntity)
         {
-            _context.TestScores.Add(newTestScoreEntity);
+            var partialTestScoreEntity = new TestScore()
+            {
+                Score = newTestScoreEntity.Score,
+                UserNameFK = newTestScoreEntity.User.ID,
+                DateTaken = newTestScoreEntity.DateTaken,
+                TestNameFK = newTestScoreEntity.Test.ID,
+                UserAnswers = new List<UserAnswers> ()
+            };
+            foreach (var userAnswer in newTestScoreEntity.UserAnswers)
+            {
+                var newUserAnswer = new UserAnswers()
+                {
+                    QuestionFK = userAnswer.Question.ID,
+                    ChosenAnswerFK = userAnswer.ChosenAnswer.ID,
+                };
+                partialTestScoreEntity.UserAnswers.Add(newUserAnswer);
+            }
+            
+            _context.TestScores.Add(partialTestScoreEntity);
             await _context.SaveChangesAsync();
-            return newTestScoreEntity;
+            return partialTestScoreEntity;
         }
 
         public async Task<bool> DeleteTestAsync(int testId)
@@ -77,7 +95,33 @@ namespace Mera.Quiz.Data.Repositories
             return entityTests;
         }
 
-        public async Task<Test> UpdateTestAsync(Test newTestEntity)
+		public async Task<List<TestScore>> GetAllTestScoresByUserAsync(int userId)
+		{
+            List<TestScore> testScoreEntities = await _context.TestScores
+                .Include(testScore => testScore.UserAnswers)
+                    .ThenInclude(userAnswers => userAnswers.ChosenAnswer)
+                .Include(testScore => testScore.UserAnswers)
+                    .ThenInclude(userAnswers => userAnswers.Question)
+					.ThenInclude(question => question.CorrectAnswer)
+				.Where(testScore => testScore.UserNameFK.Equals(userId))
+                .ToListAsync();
+            return testScoreEntities;
+		}
+
+		public async Task<TestScore> GetTestScoreAsync(int testScoreId)
+		{
+            var testScoreEntity = await _context.TestScores
+                .Include(testScore => testScore.UserAnswers)
+                    .ThenInclude(userAnswers => userAnswers.ChosenAnswer)
+                .Include(testScore => testScore.UserAnswers)
+                    .ThenInclude(userAnswers => userAnswers.Question)
+                    .ThenInclude(question => question.CorrectAnswer)
+				.FirstOrDefaultAsync(x => x.ID == testScoreId);
+            return testScoreEntity;
+
+		}
+
+		public async Task<Test> UpdateTestAsync(Test newTestEntity)
         {
             var entityTest = await _context.Tests
                 .Include(questions => questions.QuestionList)

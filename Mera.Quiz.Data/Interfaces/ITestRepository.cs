@@ -12,7 +12,9 @@ namespace Mera.Quiz.Data.Interfaces
         Task<List<Test>> GetAllTestsAsync();
         Task<Test> CreateTestAsync(Test newTestEntity);
         Task<TestScore> CreateTestScoreAsync(TestScore newTestScoreEntity);
-        Task<Test> UpdateTestAsync(Test newTestEntity);
+        Task<TestScore> GetTestScoreAsync(int testScoreId);
+        Task<List<TestScore>> GetAllTestScoresByUserAsync(int userId);
+		Task<Test> UpdateTestAsync(Test newTestEntity);
         Task<bool> DeleteTestAsync(int testId);
     }
 }
