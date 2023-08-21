@@ -98,6 +98,8 @@ namespace Mera.Quiz.Data.Repositories
 		public async Task<List<TestScore>> GetAllTestScoresByUserAsync(int userId)
 		{
             List<TestScore> testScoreEntities = await _context.TestScores
+                .Include(testScore => testScore.Test)
+                .Include(testScore => testScore.User)
                 .Include(testScore => testScore.UserAnswers)
                     .ThenInclude(userAnswers => userAnswers.ChosenAnswer)
                 .Include(testScore => testScore.UserAnswers)

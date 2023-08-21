@@ -25,7 +25,17 @@ namespace Mera.Quiz.API.Controllers
             _mediator = mediator;
         }
 
-		[HttpGet("{id}/score")]
+
+		[HttpGet("score/user/{id}")]
+		public async Task<IActionResult> GetTestScoreByUser(int id)
+		{
+			var query = new GetTestScoresByUserQuery(id);
+			var testScores = await _mediator.Send(query);
+
+			return testScores != null ? (IActionResult)Ok(testScores) : NotFound();
+		}
+
+		[HttpGet("score/{id}")]
 		public async Task<IActionResult> GetTestScore(int id)
 		{
 			var query = new GetTestScoreQuery(id);
