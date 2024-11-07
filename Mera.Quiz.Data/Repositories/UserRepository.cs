@@ -28,7 +28,7 @@ namespace Mera.Quiz.Data.Repositories
 
         public async Task<User> GetUserAsync(User userEntity)
         {
-            var user = _context.Users.SingleOrDefault(u => (u.UserName == userEntity.UserName && u.Password == userEntity.Password));
+            var user = _context.Users.SingleOrDefault(u => u.UserName == userEntity.UserName);
             return user;
         }
     }

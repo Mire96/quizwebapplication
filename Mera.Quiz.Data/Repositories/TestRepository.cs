@@ -123,6 +123,20 @@ namespace Mera.Quiz.Data.Repositories
 
 		}
 
+        public async Task<TestScore> GetFullTestScoreAsync(int testScoreId)
+        {
+			var testScoreEntity = await _context.TestScores
+                .Include(testScore => testScore.Test)
+                .Include(testScore => testScore.User)
+				.Include(testScore => testScore.UserAnswers)
+					.ThenInclude(userAnswers => userAnswers.ChosenAnswer)
+				.Include(testScore => testScore.UserAnswers)
+					.ThenInclude(userAnswers => userAnswers.Question)
+					.ThenInclude(question => question.CorrectAnswer)
+				.FirstOrDefaultAsync(x => x.ID == testScoreId);
+			return testScoreEntity;
+		}
+
 		public async Task<Test> UpdateTestAsync(Test newTestEntity)
         {
             var entityTest = await _context.Tests

@@ -7,6 +7,7 @@ using Mera.Quiz.Domain.Models;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -43,6 +44,16 @@ namespace Mera.Quiz.API.Controllers
 
 			return testScore != null ? (IActionResult)Ok(testScore) : NotFound();
 		}
+		[HttpGet("score/download/{id}")]
+		public async Task<IActionResult> DownloadTestScore(int id)
+		{
+			var query = new DownloadTestScoreQuery(id);
+			var testScoreMs = await _mediator.Send(query);
+
+			return testScoreMs != null ? Ok(testScoreMs.ToArray()): NotFound();
+		}
+
+
 
 		#region CRUD for Tests
 		// GET: api/<TestController>
@@ -76,7 +87,12 @@ namespace Mera.Quiz.API.Controllers
 
                 return test.ID != 0 ? Ok(test) : NotFound(); 
             }
-            return BadRequest();
+            string errorMessage = "Test creation failed //";
+            foreach (var error in result.Errors)
+            {
+                errorMessage += $"  {error.ErrorMessage}";
+            }
+            return BadRequest(errorMessage);
         }
 
         // POST api/<TestController>/Score
@@ -113,9 +129,14 @@ namespace Mera.Quiz.API.Controllers
 
                 return test != null ? Ok(test) : NotFound();
             }
-            return BadRequest();
-            
-        }
+			string errorMessage = "Updating test failed //";
+			foreach (var error in result.Errors)
+			{
+				errorMessage += $"  {error.ErrorMessage}";
+			}
+			return BadRequest(errorMessage);
+
+		}
 
         // DELETE api/<TestController>/5
         [HttpDelete("{id}")]
@@ -124,7 +145,7 @@ namespace Mera.Quiz.API.Controllers
             var command = new DeleteTestCommand(id);
             bool deleteTestSuccesful = await _mediator.Send(command);
 
-            return deleteTestSuccesful ? Ok() : NotFound();
+            return deleteTestSuccesful ? Ok() : NotFound("Failed to delete test");
 
         }
 

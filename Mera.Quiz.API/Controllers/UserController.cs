@@ -44,7 +44,16 @@ namespace Mera.Quiz.API.Controllers
                 var query = new GetUserQuery(userModel);
                 var user = await _mediator.Send(query);
 
-                return user != null ? (IActionResult)Ok(user) : NotFound();
+				if (user != null)
+				{
+					if (userModel.Password != user.Password)
+					{
+						return (IActionResult)Unauthorized("Incorrect password");
+					}
+					return (IActionResult)Ok(user);
+				}
+
+				return NotFound("User doesn't exist");
             }
             return BadRequest();
             
@@ -57,12 +66,21 @@ namespace Mera.Quiz.API.Controllers
             ValidationResult result = validator.Validate(userModel);
             if (result.IsValid)
             {
+                var query = new GetUserQuery(userModel);
+                var userExist = await _mediator.Send(query);
+                if (userExist != null)
+                {
+                    return (IActionResult)Conflict("Username taken, try a different one");
+                }
                 var command = new CreateUserCommand(userModel);
                 var user = await _mediator.Send(command);
 
-                return user != null ? (IActionResult)Ok(user) : NotFound();
+                if (user != null) 
+                {
+                    return (IActionResult)Ok(user);
+				}
             }
-            return BadRequest();
+            return BadRequest("Username or password can't be empty");
         }
 
         

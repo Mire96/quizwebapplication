@@ -17,7 +17,7 @@ namespace Mera.Quiz.API.Adapters.TestAdapters.Queries
 
 		public async Task<List<TestScoreModel>> Handle(GetTestScoresByUserQuery request, CancellationToken cancellationToken)
 		{
-			return await _testService.GetAllTestScoresByUser(request.Id);
+			return await _testService.GetAllTestScoresByUserAsync(request.Id);
 		}
 	}
 }
